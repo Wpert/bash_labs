@@ -1,0 +1,50 @@
+#!/bin/bash
+
+flag="-dir"
+origin_dir="$PWD"
+
+file_path="$origin_dir"
+filename="myfile"
+
+link_path="$origin_dir"
+linkname="mylink"
+
+for param in "$@"
+do
+    if [ "$param" == "-f" ];
+    then
+        flag="-f1";
+        continue;
+    elif [ "$param" == "-l" ];
+    then
+        flag="-l1";
+        continue;
+    fi
+
+    case "$flag" in
+        -dir)
+            mkdir "$param";
+            cd "$param";
+            file_path="$file_path/$param";
+            ;;
+        -f1)
+            filename="$param";
+            flag="-f2";
+            ;;
+        -f2)
+            echo "$param" > "$filename";
+            ;;
+        -l1)
+            linkname="$param";
+            flag="-l2";
+            ;;
+        -l2)
+            link_path="$link_path/$param";
+            ;;
+    esac
+done
+
+if  [ "$flag" == "-l2" ]
+then
+    ln -s "$link_path" "$linkname"
+fi

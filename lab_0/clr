@@ -1,0 +1,19 @@
+#!/bin/bash
+
+for i in *
+do
+    if [ "$i" == "program" ]
+    then
+        continue;
+    elif [ "$i" == "clr" ]
+    then
+        continue;
+    else
+        rm -r "$i";
+    fi
+done
+
+# for (( i=0; i < 5; i++ ))
+# do
+#     mkdir "$i"
+# done
