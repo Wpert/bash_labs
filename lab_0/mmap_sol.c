@@ -41,7 +41,7 @@ int OSCopyFile(const char* source, const char* destination) {
         return -1;
     }
 
-    void *mem = mmap(NULL, inputs.st_size, PROT_READ, MAP_SHARED, input, 0);
+    void* mem = mmap(NULL, inputs.st_size, PROT_READ, MAP_SHARED, input, 0);
     if(mem == MAP_FAILED) {
         printf("Error mapping source file\n");
         printf("%s\n", strerror(errno));
@@ -63,6 +63,8 @@ int OSCopyFile(const char* source, const char* destination) {
         close(input);
         close(output);
     }
+
+    munmap(mem, inputs.st_size);
 
     fchmod(output, inputs.st_mode);
     fchmod(input, inputs.st_mode);
