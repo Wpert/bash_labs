@@ -67,7 +67,7 @@ int main(int argc, char* argv[]) {
 			
 			std::string right_psswd;
 			epsswd >> right_psswd;
-			if (right_psswd == psswd)
+			if (right_psswd == psswd && epsswd.good())
 				std::cout << "Password correct!" << std::endl;
 			else
 				std::cout << "Password incorrect!" << std::endl;
