@@ -57,10 +57,6 @@ int main(int argv, char* argc[]) {
             exit(EXIT_FAILURE);
         }
         if (child1 == 0) {
-            if (close(STDOUT_FILENO) < 0) {
-                perror("ch1 close stdout");
-                exit(EXIT_FAILURE);
-            }
             if (close(input_fd) < 0) {
                 perror("ch1 close input");
                 exit(EXIT_FAILURE);
@@ -80,6 +76,7 @@ int main(int argv, char* argc[]) {
             char command[100];
             snprintf(command, n * sizeof(char), "/usr/bin/cat %s", inputfile);
 
+            close(pipe_fd[1]);
             // how do i need to call it??
             // if (execl("/usr/bin/bash", "/usr/bin/bash", "-c", command, (char *) NULL) < 0) {
             //     perror("ch1 execl");
@@ -99,25 +96,35 @@ int main(int argv, char* argc[]) {
             }
 
             if (child2 == 0) {
-                close(STDIN_FILENO);
-                close(STDOUT_FILENO);
                 close(pipe_fd[1]);
 
                 // read end of pipe
-                dup2(pipe_fd[0], STDIN_FILENO);
-                dup2(output_fd, STDOUT_FILENO);
+                if (dup2(pipe_fd[0], STDIN_FILENO) < 0) {
+                    perror("ch2 dup2 stdin");
+                    exit(EXIT_FAILURE);
+                }
+                if (dup2(output_fd, STDOUT_FILENO) < 0) {
+                    perror("ch2 dup2 stdout");
+                    exit(EXIT_FAILURE);
+                }
+
+                close(pipe_fd[0]);
+                close(output_fd);
 
                 // if (execl("/usr/bin/bash", "/usr/bin/bash", "-c", "grep -E '^[0-9]+$'", (char *) NULL) < 0) {
                 //     perror("ch2 execl");
                 //     exit(EXIT_FAILURE);
                 // }
+
                 if (execl("/usr/bin/grep", "grep", "-E", "^[0-9]+$", (char *) NULL) < 0) {
                     perror("ch2 execl");
                     exit(EXIT_FAILURE);
                 }
             }
             else {
-                // perror("parent");
+                // ????
+                // what do i need to do here??
+                
             }
         }
     }
