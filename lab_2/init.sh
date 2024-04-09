@@ -9,5 +9,4 @@ if test -f output; then
 else
     echo "Some error occured"
 fi
-
 # rm output

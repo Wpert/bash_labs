@@ -66,7 +66,7 @@ int main(int argv, char* argc[]) {
                 exit(EXIT_FAILURE);
             }
 
-            // pipe_fd[0] = write end of pipe
+            // write end of pipe
             if (dup2(pipe_fd[1], STDOUT_FILENO) < 0) {
                 perror("ch1 dup2");
                 exit(EXIT_FAILURE);
