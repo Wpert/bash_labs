@@ -1,0 +1,14 @@
+FROM almalinux:latest
+
+COPY main.c .
+
+RUN yum install -y gcc && \
+        gcc main.c && \
+        yum remove gcc -y && \
+        yum clean all -y
+
+WORKDIR /app
+
+ENTRYPOINT ["../a.out", "outfile"]
+
+CMD ["file1", "file2", "file3"]

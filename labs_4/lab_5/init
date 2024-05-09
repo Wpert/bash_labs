@@ -1,0 +1,5 @@
+#!/bin/bash
+
+rm a.out
+gcc http_server.c
+./a.out

@@ -116,8 +116,6 @@ private:
                     size_t i = hasher_(node.key_) % new_size;
                     new_data[i].push_back(node);
                 }
-                // size_t i = look_up(node.key_);
-                // new_data[i] = node;
             }
         }
 
