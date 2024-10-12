@@ -13,3 +13,10 @@
 1. Использовать для смешивания цветовую систем HSV.
 2. Реализовать обобщённую формулу смешивания изображений.
 3. Выполнить зеркальное отражение и транспонирование изображения.
+
+## Команда для запуска
+
+./main --f=/home/vpert/GitRepos/comp_graph/pics/cat_1.png \
+--s=/home/vpert/GitRepos/comp_graph/pics/cat_2.png \
+--a=/home/vpert/GitRepos/comp_graph/pics/dog_1.png
+

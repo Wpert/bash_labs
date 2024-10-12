@@ -86,7 +86,7 @@ CropCircle(const sf::Image &img) {
         if (IsInCircle({x, y}, center, radius))
             result.setPixel(x, y, color);
         else
-            result.setPixel(x, y, sf::Color::White);
+            result.setPixel(x, y, sf::Color::Transparent);
     }
     }
     return result;
@@ -96,7 +96,8 @@ sf::Image
 CombineThreeImages(
     sf::Image &_firstImage,
     sf::Image &_secondImage,
-    sf::Image &_thirdImage
+    sf::Image &_thirdImage,
+    double alpha
     ) {
     auto [width, height] = _firstImage.getSize();
     std::cout << width << ' ' << height << std::endl;
@@ -109,21 +110,17 @@ CombineThreeImages(
         sf::Color second = _secondImage.getPixel(x, y);
         sf::Color third = _thirdImage.getPixel(x, y);
 
-        sf::Uint8 red =(static_cast<double>(first.r)
-                      + static_cast<double>(second.r))
-                      / 2.0;
-        sf::Uint8 green =(static_cast<double>(first.g)
-                        + static_cast<double>(second.g))
-                        / 2.0;
-        sf::Uint8 blue =(static_cast<double>(first.b)
-                       + static_cast<double>(second.b))
-                       / 2.0;
+        sf::Uint8 red = alpha * first.r
+                      + (1 - alpha) * second.r;
+        sf::Uint8 green = alpha * first.g
+                      + (1 - alpha) * second.g;
+        sf::Uint8 blue = alpha * first.b
+                      + (1 - alpha) * second.b;
 
         sf::Uint8 alpha =(static_cast<double>(third.r)
                         + static_cast<double>(third.g)
-                        + static_cast<double>(third.b)
-                        + static_cast<double>(third.a))
-                        / 4.0;
+                        + static_cast<double>(third.b))
+                        / 3.0;
         sf::Color out {red, green, blue, alpha};
         output.setPixel(x, y, out);
     }
@@ -161,7 +158,7 @@ int main(int argc, char *argv[]) {
         throw std::runtime_error("wrong third file");
     }
 
-    auto output = CombineThreeImages(_first, _second, _third);
+    auto output = CombineThreeImages(_first, _second, _third, 0.5);
 
     if (!CropCircle(output).saveToFile("out.png")) {
         throw std::runtime_error("something went wrong during saving");
