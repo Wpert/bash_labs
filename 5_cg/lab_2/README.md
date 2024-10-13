@@ -17,4 +17,16 @@
 
 ## Команда для запуска
 
+```bash
 ./main --f=/home/vpert/GitRepos/labs/5_cg/pics/cube.png
+```
+
+## Полезные ссылки
+
+- [Обзорная статья на хабре](https://habr.com/ru/articles/326936/)
+
+- [Ordered dithering](https://en.wikipedia.org/wiki/Ordered_dithering)
+
+- [Floyd–Steinberg dithering](https://en.wikipedia.org/wiki/Floyd%E2%80%93Steinberg_dithering)
+
+- [Stucki Dithering](https://graphicsacademy.com/what_ditherstucki.php)
