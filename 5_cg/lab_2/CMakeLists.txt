@@ -21,7 +21,7 @@ find_package(Boost REQUIRED program_options)
 
 if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS}) 
-    add_executable(main src/main.cpp) 
+    add_executable(main src/main.cpp src/utils.hpp) 
     target_link_libraries(main ${Boost_LIBRARIES} sfml-graphics)
     target_compile_features(main PRIVATE cxx_std_20)
 endif()
