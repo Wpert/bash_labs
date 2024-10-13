@@ -16,7 +16,7 @@
 
 ## Команда для запуска
 
-./main --f=/home/vpert/GitRepos/comp_graph/pics/cat_1.png \
---s=/home/vpert/GitRepos/comp_graph/pics/cat_2.png \
---a=/home/vpert/GitRepos/comp_graph/pics/dog_1.png
+./main --f=/home/vpert/GitRepos/labs/5_cg/pics/cat_1.png \
+--s=/home/vpert/GitRepos/labs/5_cg/pics/cat_2.png \
+--a=/home/vpert/GitRepos/labs/5_cg/pics/dog_1.png
 
