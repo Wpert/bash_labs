@@ -1,5 +1,6 @@
 build
 out
+test_*
 .cache
 .idea
 .vs

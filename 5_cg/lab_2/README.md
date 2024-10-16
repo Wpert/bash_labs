@@ -18,7 +18,7 @@
 ## Команда для запуска
 
 ```bash
-./main --f=/home/vpert/GitRepos/labs/5_cg/pics/cube.png
+./main --img=/home/vpert/GitRepos/labs/5_cg/pics/dog_3.png --bpp=1 --out=filename.png --FS
 ```
 
 ## Полезные ссылки

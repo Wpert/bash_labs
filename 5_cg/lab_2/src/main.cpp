@@ -6,6 +6,7 @@
 
 namespace po = boost::program_options;
 
+
 class TDitherMatrix : public TMatrix<double> {
 public:
     TDitherMatrix() = delete;
@@ -68,6 +69,16 @@ const static TDitherMatrix StuckiDM{
     {0, 2}
 };
 
+const static TDitherMatrix SierraDM{
+    TMatrix<double>{
+     {0, 0, 0, 5, 3},
+     {2, 4, 5, 4, 2},
+     {0, 2, 3, 2, 0}
+    },
+    {0, 2},
+    32.0
+};
+
 sf::Image
 ApplyDithering(
     const sf::Image &img,
@@ -110,15 +121,24 @@ ApplyDithering(
 
 int main(int argc, char *argv[]) {
     po::options_description desc("Allowed options");
+    bool flagFloydSteinberg = false;
+    bool flagStucki = false;
+    bool flagSierra = false;
+    bool flagHelp = false;
     desc.add_options()
         ("img", po::value<std::string>(), "image to dithering")
         ("bpp", po::value<uint>(), "how many bytes per pixel that takes values from 1 to 8")
-        ("h", "prints help")
-        ("help", "prints help")
+        ("out", po::value<std::string>(), "output filename")
+        ("FS", po::bool_switch(&flagFloydSteinberg), "apply Floyd-Steinberg dithering")
+        ("SK", po::bool_switch(&flagStucki), "apply Stucki dithering")
+        ("SR", po::bool_switch(&flagSierra), "apply Sierra dithering")
+        ("h", po::bool_switch(&flagHelp), "prints help")
+        ("help", po::bool_switch(&flagHelp), "prints help")
     ;
     auto vmap = process_program_options(argc, argv, desc);
-    if (vmap.contains("h") || vmap.contains("help")) {
+    if (flagHelp) {
         desc.print(std::cout);
+        return 0;
     }
     else if (!vmap.contains("img") || !vmap.contains("bpp")) {
         throw std::runtime_error("Too few arguments");
@@ -134,18 +154,28 @@ int main(int argc, char *argv[]) {
         throw std::runtime_error("wrong bpp value");
     }
 
+    if (!flagFloydSteinberg && !flagStucki && !flagSierra) {
+        throw std::runtime_error("you have to choose dithering method");
+    }
+
+    TDitherMatrix dm = FloydSteinbergDM;
+    if (flagStucki)
+        dm = StuckiDM;
+    if (flagSierra)
+        dm = SierraDM;
+
     sf::Image output{
-        std::move(ApplyDithering(_img, StuckiDM, userBPP))
+        std::move(ApplyDithering(_img, dm, userBPP))
     };
 
-    if (!output.saveToFile("out.png")) {
-        throw std::runtime_error("something went wrong during saving");
+    std::string filename{"out.png"};
+
+    if (vmap.contains("out")) {
+        filename = vmap["out"].as<std::string>();
     }
-    
-    auto [width, height] = _img.getSize();
-    const auto* toCout = output.getPixelsPtr();
-    for (size_t i = 0; i < width * height * 4; ++i) {
-        std::cout << toCout[i];
+
+    if (!output.saveToFile(filename)) {
+        throw std::runtime_error("something went wrong during saving");
     }
 
     return 0;
